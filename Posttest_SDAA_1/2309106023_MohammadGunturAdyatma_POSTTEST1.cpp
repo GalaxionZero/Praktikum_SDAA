@@ -2,7 +2,7 @@
 using namespace std;
 
 
-int menaraHanoi(int n, char asal, char sementara, char tujuan){
+int menaraHanoi(int n, string asal, string sementara, string tujuan){
     if (n == 0)
         return 0;
 
@@ -16,7 +16,10 @@ int menaraHanoi(int n, char asal, char sementara, char tujuan){
 
 int main(){
     int n = 3;
+    string asal = "asal";
+    string sementara = "sementara";
+    string tujuan = "tujuan";
 
-    menaraHanoi(n, 'A', 'B', 'C');
+    menaraHanoi(n, asal, sementara, tujuan);
     return 0;
 }
