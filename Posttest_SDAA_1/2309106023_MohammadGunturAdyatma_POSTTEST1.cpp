@@ -2,24 +2,24 @@
 using namespace std;
 
 
-int menaraHanoi(int n, string asal, string sementara, string tujuan){
-    if (n == 0)
+int menaraHanoi(int jumlahPiringan, string asal, string sementara, string tujuan){
+    if (jumlahPiringan == 0)
         return 0;
 
-    menaraHanoi(n-1, asal, tujuan, sementara);
-    cout << "Pindahkan piringan " << n << " dari menara " << asal << " ke menara " << tujuan << endl;
-    menaraHanoi(n-1, sementara, asal, tujuan);
+    menaraHanoi(jumlahPiringan-1, asal, tujuan, sementara);
+    cout << "Pindahkan piringan " << jumlahPiringan << " dari menara " << asal << " ke menara " << tujuan << endl;
+    menaraHanoi(jumlahPiringan-1, sementara, asal, tujuan);
 
     return 0;
 }
 
 
 int main(){
-    int n = 3;
+    int jumlahPiringan = 3;
     string asal = "asal";
     string sementara = "sementara";
     string tujuan = "tujuan";
 
-    menaraHanoi(n, asal, sementara, tujuan);
+    menaraHanoi(jumlahPiringan, asal, sementara, tujuan);
     return 0;
 }
