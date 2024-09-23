@@ -39,20 +39,80 @@ int addStudents(students student[], int *numberOfStudents)
     return 0;
 }
 
-int listStudents(students student[], int numberOfStudents)
+void listStudents(students student[], int numberOfStudents)
 {
+    students *head = &student[0];
+    while (head != nullptr)
+    {
+        cout << "Student's Name: " << head->name << endl;
+        cout << "Student's Attack Type: " << head->attackType << endl;
+        cout << "Student's Defense Type: " << head->defenseType << endl;
+        cout << "Student's Type of Student: " << head->typeOfStudent << endl;
+        cout << "Student's Range of Weapon: " << head->rangeOfWeapon << endl;
+        cout << "Student's School: " << head->school << endl;
+        cout << "Student's Club: " << head->club << endl;
+        head = head->next;
+    }
+}
+
+
+void updateStudents(students student[], int numberOfStudents)
+{
+    string name;
+    cout << "Enter Student's Name: ";
+    getline(cin, name);
+
     for (int i = 0; i < numberOfStudents; i++)
     {
-        cout << "Student's Name: " << student[i].name << endl;
-        cout << "Student's Attack Type: " << student[i].attackType << endl;
-        cout << "Student's Defense Type: " << student[i].defenseType << endl;
-        cout << "Student's Type of Student: " << student[i].typeOfStudent << endl;
-        cout << "Student's Range of Weapon: " << student[i].rangeOfWeapon << endl;
-        cout << "Student's School: " << student[i].school << endl;
-        cout << "Student's Club: " << student[i].club << endl;
+        if (student[i].name == name)
+        {
+            cout << "Enter Student's Attack Type: ";
+            getline(cin, student[i].attackType);
+            cout << "Enter Student's Defense Type: ";
+            getline(cin, student[i].defenseType);
+            cout << "Enter Student's Type of Student: ";
+            getline(cin, student[i].typeOfStudent);
+            cout << "Enter Student's Range of Weapon: ";
+            getline(cin, student[i].rangeOfWeapon);
+            cout << "Enter Student's School: ";
+            getline(cin, student[i].school);
+            cout << "Enter Student's Club: ";
+            getline(cin, student[i].club);
+        }
+    }
+}
+
+
+void deleteStudents(students student[], int *numberOfStudents)
+{
+    string name;
+    cout << "Enter Student's Name: ";
+    getline(cin, name);
+
+    for (int i = 0; i < *numberOfStudents; i++)
+    {
+        if (student[i].name == name)
+        {
+            if (i < *numberOfStudents - 1)
+            {
+                student[i] = student[*numberOfStudents - 1];
+                student[*numberOfStudents - 1].next = nullptr;
+            }
+            else
+            {
+                student[i].name = "";
+                student[i].attackType = "";
+                student[i].defenseType = "";
+                student[i].typeOfStudent = "";
+                student[i].rangeOfWeapon = "";
+                student[i].school = "";
+                student[i].club = "";
+                student[i].next = nullptr;
+            }
+        }
     }
 
-    return 0;
+    *numberOfStudents -= 1;
 }
 
 int main()
@@ -74,6 +134,8 @@ int main()
         cout << "===== MENU =====" << endl;
         cout << "1. Add Student" << endl;
         cout << "2. View Student" << endl;
+        cout << "3. Update Student" << endl;
+        cout << "4. Delete Student" << endl;
         cout << "3. Exit" << endl;
         cout << "Choose:" ;
         cin >> choice;
@@ -87,6 +149,12 @@ int main()
             break;
         case 2:
             listStudents(student, numberOfStudents);
+            break;
+        case 3:
+            updateStudents(student, numberOfStudents);
+            break;
+        case 4:
+            deleteStudents(student, &numberOfStudents);
             break;
         default:
             break;
