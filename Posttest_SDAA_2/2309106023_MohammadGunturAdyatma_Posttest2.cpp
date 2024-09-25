@@ -136,7 +136,7 @@ int main()
         cout << "2. View Student" << endl;
         cout << "3. Update Student" << endl;
         cout << "4. Delete Student" << endl;
-        cout << "3. Exit" << endl;
+        cout << "5. Exit" << endl;
         cout << "Choose:" ;
         cin >> choice;
         cin.clear();
@@ -156,6 +156,8 @@ int main()
         case 4:
             deleteStudents(student, &numberOfStudents);
             break;
+        case 5:
+            return 0;
         default:
             break;
         }
