@@ -194,6 +194,132 @@ void dequeue(students *&front, students *&rear) {
     delete temp;
 }
 
+int getLength(students *head) {
+    int length = 0;
+    students *temp = head;
+    while (temp != nullptr) {
+        length++;
+        temp = temp->next;
+    }
+    return length;
+}
+
+students** listToArray(students *head, int length) {
+    students **arr = new students*[length];
+    students *temp = head;
+    for (int i = 0; i < length; i++) {
+        arr[i] = temp;
+        temp = temp->next;
+    }
+    return arr;
+}
+
+void arrayToList(students **arr, students *&head, int length) {
+    head = arr[0];
+    students *temp = head;
+    for (int i = 1; i < length; i++) {
+        temp->next = arr[i];
+        temp = temp->next;
+    }
+    temp->next = nullptr;
+    delete[] arr;
+}
+
+void shellSort(students *&head, bool ascending = true) {
+    int n = getLength(head);
+    if (n <= 1) return;
+
+    students **arr = listToArray(head, n);
+
+    for (int gap = n / 2; gap > 0; gap /= 2) {
+        for (int i = gap; i < n; i++) {
+            students *temp = arr[i];
+            int j;
+            if (ascending) {
+                for (j = i; j >= gap && arr[j - gap]->name > temp->name; j -= gap) {
+                    arr[j] = arr[j - gap];
+                }
+            } else {
+                for (j = i; j >= gap && arr[j - gap]->name < temp->name; j -= gap) {
+                    arr[j] = arr[j - gap];
+                }
+            }
+            arr[j] = temp;
+        }
+    }
+
+    arrayToList(arr, head, n);
+}
+
+students* getTail(students* cur) {
+    while (cur != nullptr && cur->next != nullptr)
+        cur = cur->next;
+    return cur;
+}
+
+students* partition(students* head, students* end, students** newHead, students** newEnd, bool ascending) {
+    students* pivot = end;
+    students* prev = nullptr, *cur = head, *tail = pivot;
+
+    while (cur != pivot) {
+        if ((ascending && cur->name < pivot->name) || (!ascending && cur->name > pivot->name)) {
+            if (*newHead == nullptr)
+                *newHead = cur;
+
+            prev = cur;
+            cur = cur->next;
+        } else {
+            if (prev) {
+                prev->next = cur->next;
+            }
+            students* tmp = cur->next;
+            cur->next = nullptr;
+            tail->next = cur;
+            tail = cur;
+            cur = tmp;
+        }
+    }
+
+    if (*newHead == nullptr)
+        *newHead = pivot;
+
+    *newEnd = tail;
+
+    return pivot;
+}
+
+students* quickSortRecur(students* head, students* end, bool ascending) {
+    if (!head || head == end)
+        return head;
+
+    students* newHead = nullptr, *newEnd = nullptr;
+
+    students* pivot = partition(head, end, &newHead, &newEnd, ascending);
+
+    if (newHead != pivot) {
+        students* temp = newHead;
+        while (temp->next != pivot)
+            temp = temp->next;
+        temp->next = nullptr; 
+
+        newHead = quickSortRecur(newHead, temp, ascending);
+
+        temp = getTail(newHead);
+        temp->next = pivot;
+    }
+
+    pivot->next = quickSortRecur(pivot->next, newEnd, ascending);
+
+    return newHead;
+}
+
+void quickSort(students *&head, bool ascending = true) {
+    if (!head || head->next == nullptr)
+        return;
+
+    head = quickSortRecur(head, getTail(head), ascending);
+}
+
 int main() {
     int choice;
     string name;
@@ -209,7 +335,8 @@ int main() {
         cout << "4. Delete Student" << endl;
         cout << "5. Stack Operations (Push/Pop)" << endl;
         cout << "6. Queue Operations (Enqueue/Dequeue)" << endl;
-        cout << "7. Exit" << endl;
+        cout << "7. Sort Students (Shell Sort / Quick Sort)" << endl;
+        cout << "8. Exit" << endl;
         cout << "Choose: ";
         cin >> choice;
         cin.clear();
@@ -272,6 +399,26 @@ int main() {
                     listStudents(queueFront);
                 break;
             case 7:
+                cout << "1. Shell Sort Ascending" << endl;
+                cout << "2. Shell Sort Descending" << endl;
+                cout << "3. Quick Sort Ascending" << endl;
+                cout << "4. Quick Sort Descending" << endl;
+                cout << "Choose: ";
+                cin >> choice;
+                cin.clear();
+                cin.ignore(10000, '\n');
+                if (choice == 1)
+                    shellSort(head, true);
+                else if (choice == 2)
+                    shellSort(head, false);
+                else if (choice == 3)
+                    quickSort(head, true);
+                else if (choice == 4)
+                    quickSort(head, false);
+
+                listStudents(head);
+                break;
+            case 8:
                 return 0;
             default:
                 cout << "Invalid choice!" << endl;
